@@ -5,12 +5,8 @@ import android.support.annotation.RequiresApi;
 
 import com.example.liban.omtest.dto.Images;
 import com.example.liban.omtest.dto.Posts;
-import com.example.liban.omtest.dto.Urls;
 
 import io.reactivex.functions.BiFunction;
-
-import java.util.List;
-import java.util.function.Function;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class AlmostPost implements BiFunction<Posts, Images, ReadyPost> {

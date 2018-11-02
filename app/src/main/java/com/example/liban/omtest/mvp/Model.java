@@ -1,7 +1,6 @@
 package com.example.liban.omtest.mvp;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
@@ -10,9 +9,7 @@ import com.example.liban.omtest.ApiImages;
 import com.example.liban.omtest.ApiPosts;
 import com.example.liban.omtest.ReadyPost;
 import com.example.liban.omtest.dto.Images;
-import com.example.liban.omtest.dto.ListPhoto;
 import com.example.liban.omtest.dto.Posts;
-import com.example.liban.omtest.dto.Urls;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 
@@ -20,7 +17,6 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
@@ -78,7 +74,7 @@ public class Model {
 
         mCompositeDisposable.add(Observable.zip(textObservable, imagesObservable, new AlmostPost())
                 .toList()
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<List<ReadyPost>>() {
                     @Override

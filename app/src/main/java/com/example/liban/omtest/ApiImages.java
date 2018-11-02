@@ -1,13 +1,11 @@
 package com.example.liban.omtest;
 
 import com.example.liban.omtest.dto.Images;
-import com.example.liban.omtest.dto.ListPhoto;
 
 import java.util.List;
 
 import io.reactivex.Single;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
 
 public interface ApiImages {
 
