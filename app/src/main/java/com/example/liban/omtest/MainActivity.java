@@ -19,9 +19,15 @@ import android.widget.ProgressBar;
 
 import com.example.liban.omtest.mvp.Presenter;
 import com.example.liban.omtest.mvp.View;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.security.ProviderInstaller;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Objects;
+
+import javax.net.ssl.SSLContext;
 
 
 public class MainActivity extends AppCompatActivity implements View {
@@ -51,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View {
         mRecyclerView = findViewById(R.id.recycler_id);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         init();
+        initSSL();
         mPresenter = new Presenter(this);
 
     }
@@ -62,7 +69,26 @@ public class MainActivity extends AppCompatActivity implements View {
 
     }
 
+
+    private  void initSSL(){
+        try {
+            SSLContext.getInstance("TLSv1.2");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        try {
+            ProviderInstaller.installIfNeeded(this.getApplicationContext());
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void init() {
+
         mRecyclerAdapter = new RecyclerAdapter(this);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         mSwipeRefreshLayout.setOnRefreshListener(() -> mPresenter.requestData());
@@ -74,8 +100,9 @@ public class MainActivity extends AppCompatActivity implements View {
         mProgressBar.setVisibility(android.view.View.GONE);
         mRecyclerAdapter.setPosts(posts);
         mRecyclerAdapter.notifyDataSetChanged();
-        mRecyclerView.getLayoutManager().onRestoreInstanceState(mListState);
         mSwipeRefreshLayout.setRefreshing(false);
+        mRecyclerView.getLayoutManager().onRestoreInstanceState(mListState);
+
     }
 
 
@@ -85,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements View {
         mPresenter.destroy();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onError(String msg) {
         Snackbar.make(mConstraintLayout, msg, Snackbar.LENGTH_INDEFINITE)
